@@ -55,7 +55,7 @@ public class ProductCatalougue extends AbstractComponent{
 	public WebElement getProductByName(String productName) {
 	    // Correct the string comparison to use the variable productName
 	    WebElement prod = getProductList().stream()
-	        .filter(product -> product.findElement(By.xpath("//section[@id='products']")).getText().equals(productName)) // compares with productName, not the string literal
+	        .filter(product -> product.findElement(By.cssSelector("b")).getText().equals(productName)) 
 	        .findFirst()
 	        .orElse(null);
 	    return prod;

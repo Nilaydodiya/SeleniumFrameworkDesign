@@ -10,7 +10,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
+import SeleniumFramework.PageObjects.CartPage;
 import SeleniumFramework.PageObjects.LandingPage;
 import SeleniumFramework.PageObjects.ProductCatalougue;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -24,30 +26,28 @@ public class SubmitOrder {
 		
 		WebDriver driver = new ChromeDriver();
 		
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		
 		driver.manage().window().maximize();
 		LandingPage landingPage = new LandingPage(driver);
 		landingPage.goTo();
-		landingPage.loginApplication("kartikshah@yopmail.com","Admin@123");
-		ProductCatalougue productcatalouge = new ProductCatalougue(driver);
-		List<WebElement> products = productcatalouge.getProductList();
-		productcatalouge.addProductToCart(productName);
+		ProductCatalougue productCatalougue = landingPage.loginApplication("kartikshah@yopmail.com","Admin@123");
 		
+		List<WebElement> products = productCatalougue.getProductList();
+		productCatalougue.addProductToCart(productName);
+		CartPage cartPage = productCatalougue.goToCartPage();
+		
+
+		
+		Boolean match = cartPage.verifyProductDisplay(productName);
+		Assert.assertTrue(match);
+		cartPage.goToCheckout();
+
+	   
+	  
+	    
+	 
 	
-
-		
-
-	   
-	   
-	    driver.findElement(By.cssSelector("[routerlink*='cart']")).click();
-	    
-	   /* List <WebElement> cartProducts = driver.findElements(By.cssSelector(".cartSection h3"));
-	    Boolean match = cartProducts.stream().anyMatch(cartProduct-> cartProduct.getText().equalsIgnoreCase(productName));
-	    Assert.assertTrue(match);*/
-	    
-	    driver.findElement(By.cssSelector(".totalRow button")).click();
-	    //Assert.assertTrue(match);
 	    
 	    Actions a = new Actions(driver);
 	    a.sendKeys(driver.findElement(By.xpath("//input[@placeholder='Select Country']")), "india").build().perform();
