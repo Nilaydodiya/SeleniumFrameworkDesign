@@ -39,8 +39,9 @@ public class CartPage extends AbstractComponent{
 	    return match;
 	}
 	
-	public void goToCheckout()
+	public CheckOutPage goToCheckout()
 	{
 		checkoutEle.click();
+		return new CheckOutPage(driver);
 	}
 }

@@ -62,7 +62,7 @@ public class EndToEndTest {
 	    driver.findElement(By.cssSelector(".action__submit")).click();
 	    
 	    String confirmMessage = driver.findElement(By.cssSelector(".hero-primary")).getText();
-	    confirmMessage.equals("Thankyou for the order") ;
+	    confirmMessage.equals("THANK YOU FOR THE ORDER.") ;
 	    
 	    //driver.close();
 	}

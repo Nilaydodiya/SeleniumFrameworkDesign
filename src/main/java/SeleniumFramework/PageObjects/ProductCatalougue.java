@@ -32,13 +32,13 @@ public class ProductCatalougue extends AbstractComponent{
 	By toastMessage = By.cssSelector("#toast-container");
 	
 	
-	public List<WebElement> getProductList()
+	/*public List<WebElement> getProductList()
 	{
 		waitForElementToAppear(productsBy);
 		return products;
 	}
 	
-	/*public WebElement getProductByName(String productName)	
+	public WebElement getProductByName(String productName)	
 	{
 		WebElement prod = getProductList().stream().filter(product-> product.findElement(By.cssSelector("b")).getText().equals(productName)).findFirst().orElse(null);
 		return prod;
@@ -51,13 +51,12 @@ public class ProductCatalougue extends AbstractComponent{
 		prod.findElement(addToCart).click();
 		waitForElementToAppear(toastMessage);
 		waitForElementToDisappear(spinner);
-	}*/
+	}
 	public WebElement getProductByName(String productName) {
 	    // Correct the string comparison to use the variable productName
 	    WebElement prod = getProductList().stream()
-	        .filter(product -> product.findElement(By.cssSelector("b")).getText().equals(productName)) 
-	        .findFirst()
-	        .orElse(null);
+	        .filter(product -> product.findElement(By.cssSelector("b")).getText().equals("zara coat 3")) 
+	        .findFirst().orElse(null);
 	    return prod;
 	}
 
@@ -72,8 +71,44 @@ public class ProductCatalougue extends AbstractComponent{
 	    } else {
 	        // Handle the case where the product is not found
 	        throw new NoSuchElementException("Product with name '" + productName + "' not found.");
-	    }
-	}
+	    }*/
+	    public List<WebElement> getProductList()
+		{
+			waitForElementToAppear(productsBy);
+			List<WebElement> products = driver.findElements(productsBy);
+			System.out.println("Total products found: " + products.size()); // Log total products found
+			for (WebElement product : products) {
+				// Log the entire product HTML for debugging
+				//System.out.println("Product HTML: " + product.getAttribute("outerHTML"));
 
-	
+				String productText = product.findElement(By.cssSelector("b")).getText().trim().toLowerCase();
+				System.out.println("Checking product: " + productText);  // Log product being checked
+			}
+			return products; // Return the list of products
+		}
+
+	public WebElement getProductByName(String productName) {
+			// Retrieve the product list only once
+			List<WebElement> products = getProductList();
+
+			return products.stream()
+					.filter(product -> product.findElement(By.cssSelector("b")).getText().trim().equalsIgnoreCase(productName))
+					.findFirst()
+					.orElseThrow(() -> new NoSuchElementException("Product with name '" + productName + "' not found."));
+		}
+
+		public void addProductToCart(String productName) {
+			WebElement prod = getProductByName(productName);
+
+			// Check if prod is null before attempting to find addToCart button
+			if (prod != null) {
+				prod.findElement(addToCart).click();
+				waitForElementToAppear(toastMessage);
+				waitForElementToDisappear(spinner);
+			} else {
+				// Handle the case where the product is not found
+				throw new NoSuchElementException("Product with name '" + productName + "' not found.");
+			}
+		}  
+	   
 }
